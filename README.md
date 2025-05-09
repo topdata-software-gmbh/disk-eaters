@@ -48,7 +48,8 @@ The tool uses concurrent processing to efficiently scan large directory structur
 
 ## License
 
-[MIT License](LICENSE)
+[Animal Liberation License (ALL) v1.0](LICENSE)
+
 
 ## Contributing
 
