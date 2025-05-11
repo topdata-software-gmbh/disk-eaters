@@ -40,7 +40,7 @@ find_largest_directories() {
     print_header "TOP ${MAX_ITEMS} LARGEST DIRECTORIES UNDER ${SCAN_DIR}"
     
     # Use du to find directories, excluding certain system paths
-    du -x --max-depth=4 "${SCAN_DIR}" 2>/dev/null | sort -rn | head -n ${MAX_ITEMS} | \
+    find "${SCAN_DIR}" -mindepth 1 -maxdepth 1 -xdev -type d -print0 2>/dev/null | xargs -0 -r du -s 2>/dev/null | sort -rn | head -n ${MAX_ITEMS} | \
     awk '{
         size = $1; 
         $1=""; 
@@ -48,11 +48,11 @@ find_largest_directories() {
         
         # Convert size to human-readable format
         if (size >= 1048576) {
-            printf "%.2f GB\t%s\n", size/1048576, $0
+            printf "%.2f GiB\t%s\n", size/1048576, $0
         } else if (size >= 1024) {
-            printf "%.2f MB\t%s\n", size/1024, $0
+            printf "%.2f MiB\t%s\n", size/1024, $0
         } else {
-            printf "%d KB\t%s\n", size, $0
+            printf "%d KiB\t%s\n", size, $0
         }
     }' | tee -a "${CURRENT_SNAPSHOT}.dirs"
     
